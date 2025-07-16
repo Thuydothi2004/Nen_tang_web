@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Employee Form with Custom CKEditor Toolbar</title>
+  <!-- CKEditor CDN -->
+  <script src="https://cdn.ckeditor.com/4.22.1/standard/ckeditor.js"></script>
+  <style>
+    @font-face {
+      font-family: 'DotMatrix';
+      src: url('DotMatrix.ttf') format('truetype');
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    fieldset {
+      margin-bottom: 20px;
+      padding: 15px;
+    }
+    label {
+      display: inline-block;
+      width: 150px;
+      margin-bottom: 5px;
+      vertical-align: top;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="datetime-local"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 250px;
+      margin-bottom: 10px;
+    }
+    .readonly {
+      display: inline-block;
+      width: 250px;
+      padding: 4px 0;
+      margin-bottom: 10px;
+    }
+    .captcha {
+      font-family: 'DotMatrix', monospace;
+      font-size: 24px;
+      letter-spacing: 3px;
+      border: 1px solid #ccc;
+      display: inline-block;
+      padding: 5px 10px;
+      margin-right: 10px;
+      vertical-align: middle;
+    }
+    .captcha-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .required-star {
+      color: red;
+    }
+    .required-note {
+      margin-top: 5px;
+      font-size: 12px;
+      color: #000;
+    }
+    .nav-buttons {
+      margin-top: 10px;
+    }
+    .nav-buttons button {
+      background-color: #333;
+      color: white;
+      border: none;
+      width: 24px;
+      height: 24px;
+      margin-right: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      line-height: 22px;
+      padding: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Employee Information Form</h1>
+  <form action="#" method="post">
+    <!-- Basic Info -->
+    <fieldset>
+      <legend>Basic Info</legend>
+      <label>Employee ID:</label>
+      <div class="readonly">9</div><br>
+      <label>Last Name:</label>
+      <div class="readonly">Dodsworth</div><br>
+      <label for="firstName">First Name: <span class="required-star">*</span></label>
+      <input type="text" id="firstName" name="first_name" value="Anne" required><br>
+      <label>Gender:</label><br>
+      <label style="margin-left:150px;"><input type="radio" name="gender" value="Male"> Male</label><br>
+      <label style="margin-left:150px;"><input type="radio" name="gender" value="Female"> Female</label><br>
+      <label style="margin-left:150px;"><input type="radio" name="gender" value="XXX"> XXX</label><br>
+      <label style="margin-left:150px;"><input type="radio" name="gender" value="ZZZ" checked> ZZZ</label><br>
+      <label for="title">Title:</label>
+      <input type="text" id="title" name="title" value="Sales Representative"><br>
+      <label for="suffix">Suffix:</label>
+      <input type="text" id="suffix" name="suffix" value="Ms."><br>
+      <label for="birthdate">Birth Date:</label>
+      <input type="datetime-local" id="birthdate" name="birthdate" value="1969-07-02T00:00"><br>
+      <label for="hiredate">Hire Date:</label>
+      <input type="datetime-local" id="hiredate" name="hiredate" value="1994-11-15T00:00"><br>
+      <label for="ssn">SSN (# if applicable):</label>
+      <input type="text" id="ssn" name="ssn" placeholder="e.g., 123-45-6789"><br>
+      <label for="reportsTo">Reports To:</label>
+      <select id="reportsTo" name="reports_to">
+        <option value="Buchanan" selected>Buchanan</option>
+        <option value="Davolio">Davolio</option>
+      </select>
+    </fieldset>
+
+    <!-- Contact Info -->
+    <fieldset>
+      <legend>Contact Info</legend>
+      <label for="email">Email: <span class="required-star">*</span></label>
+      <input type="email" id="email" name="email" value="name@example.com" required><br>
+      <label for="address">Address:</label>
+      <input type="text" id="address" name="address" value="7 Houndstooth Rd."><br>
+      <label for="city">City:</label>
+      <input type="text" id="city" name="city" value="London"><br>
+      <label for="region">Region:</label>
+      <input type="text" id="region" name="region"><br>
+      <label for="postalCode">Postal Code:</label>
+      <input type="text" id="postalCode" name="postal_code" value="WG2 7LT"><br>
+      <label for="country">Country:</label>
+      <select id="country" name="country">
+        <option value="UK">United Kingdom</option>
+        <option value="RU" selected>Russian Federation</option>
+      </select><br>
+      <label for="phone">US Home Phone: <span class="required-star">*</span></label>
+      <input type="tel" id="phone" name="phone" value="(234)234-2342" required><br>
+      <label for="photo">Photo:</label>
+      <input type="text" id="photo" name="photo" value="EmpID9.bmp">
+    </fieldset>
+
+    <!-- Optional Info -->
+    <fieldset>
+      <legend>Optional Info</legend>
+      <label for="notes">Notes:</label><br>
+      <textarea id="notes" name="notes">Anne has a BA degree in English from St. Lawrence College.
+She is fluent in French and German.ZZZ</textarea><br>
+
+      <script>
+        CKEDITOR.replace('notes', {
+          removePlugins: 'elementspath',
+          resize_enabled: false,
+          toolbar: [
+            { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike'] },
+            { name: 'paragraph', items: ['JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'] },
+            { name: 'scripts', items: ['Subscript', 'Superscript'] },
+            { name: 'editing', items: ['Undo', 'Redo'] },
+            { name: 'list', items: ['NumberedList', 'BulletedList'] },
+            { name: 'insert', items: ['Image', 'Link'] },
+            { name: 'styles', items: ['Format'] },
+            { name: 'cleanup', items: ['RemoveFormat'] }
+          ],
+          format_tags: 'p;h1;h2;h3',
+          removeButtons: ''
+        });
+      </script>
+
+      <label>Preferred Shift:</label><br>
+      <label style="margin-left:150px;"><input type="checkbox" name="shift_regular" value="Regular"> Regular</label><br>
+      <label style="margin-left:150px;"><input type="checkbox" name="shift_gravy" value="Gravy Yard" checked> Gravy Yard</label><br>
+      <label for="active">Active?</label>
+      <input type="checkbox" id="active" name="active" checked><br>
+
+      <div class="captcha-container">
+        <label>Are you human? <span class="required-star">*</span></label>
+        <div class="captcha">TIDAWO</div>
+        <button type="button" style="margin-left:10px;">Click to change</button>
+      </div>
+      <input type="text" name="captcha" placeholder="Enter code" required>
+    </fieldset>
+
+    <div class="nav-buttons">
+      <button type="button">&#9664;</button>
+      <button type="button">&#9654;</button>
+    </div>
+
+    <div style="text-align:right;">
+      <button type="submit">Submit</button>
+      <button type="reset">Cancel</button>
+    </div>
+  </form>
+
+  <p class="required-note"><span class="required-star">*</span> required</p>
+</body>
+</html>

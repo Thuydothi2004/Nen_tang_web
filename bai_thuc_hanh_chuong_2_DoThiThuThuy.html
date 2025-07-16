@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Quản lý sinh viên</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: "Roboto", sans-serif;
+      background-color: #f0f2f5;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      color: #2c3e50;
+      border-left: 5px solid #3498db;
+      padding-left: 10px;
+      margin-bottom: 20px;
+    }
+    form {
+      background-color: #ffffff;
+      border: 1px solid #e0e0e0;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      padding: 25px;
+      max-width: 500px;
+      margin-bottom: 50px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: 500;
+      color: #34495e;
+    }
+    input[type="text"],
+    input[type="email"],
+    input[type="date"],
+    textarea {
+      width: 100%;
+      padding: 10px 12px;
+      margin-top: 6px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      font-size: 14px;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="date"]:focus,
+    textarea:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.4);
+      outline: none;
+    }
+    .gender-group {
+      margin-top: 8px;
+    }
+    .gender-group label {
+      display: inline-block;
+      margin-right: 12px;
+      font-weight: normal;
+    }
+    button {
+      margin-top: 20px;
+      background-color: #3498db;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 500;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    button:hover {
+      background-color: #2980b9;
+      transform: translateY(-1px);
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      background-color: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+    }
+    th, td {
+      padding: 14px 12px;
+      text-align: left;
+    }
+    th {
+      background-color: #3498db;
+      color: #fff;
+      font-weight: 600;
+    }
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+    tr:hover {
+      background-color: #f1f1f1;
+    }
+    .actions a {
+      margin-right: 10px;
+      text-decoration: none;
+      color: #3498db;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .actions a:hover {
+      color: #e74c3c;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Form Thêm Sinh Viên</h2>
+  <form>
+    <label for="maSV">Mã sinh viên *</label>
+    <input type="text" id="maSV" name="maSV" required />
+
+    <label for="hoTen">Họ và tên *</label>
+    <input type="text" id="hoTen" name="hoTen" required />
+
+    <label for="email">Email *</label>
+    <input type="email" id="email" name="email" required />
+
+    <label for="ngaySinh">Ngày sinh</label>
+    <input type="date" id="ngaySinh" name="ngaySinh" />
+
+    <label>Giới tính</label>
+    <div class="gender-group">
+      <input type="radio" id="nam" name="gioiTinh" value="Nam" />
+      <label for="nam">Nam</label>
+      <input type="radio" id="nu" name="gioiTinh" value="Nữ" />
+      <label for="nu">Nữ</label>
+    </div>
+
+    <label for="ghiChu">Ghi chú</label>
+    <textarea id="ghiChu" name="ghiChu" rows="3"></textarea>
+
+    <button type="submit">➕ Thêm sinh viên</button>
+  </form>
+
+  <h2>Danh Sách Sinh Viên</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>STT</th>
+        <th>Mã SV</th>
+        <th>Họ tên</th>
+        <th>Email</th>
+        <th>Giới tính</th>
+        <th>Ngày sinh</th>
+        <th>Hành động</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>SV001</td>
+        <td>Nguyễn Văn A</td>
+        <td>a@example.com</td>
+        <td>Nam</td>
+        <td>2004-01-15</td>
+        <td class="actions">
+          <a href="#">✏️ Sửa</a>
+          <a href="#">🗑️ Xoá</a>
+        </td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>SV002</td>
+        <td>Đỗ Thị B</td>
+        <td>b@example.com</td>
+        <td>Nữ</td>
+        <td>2004-03-20</td>
+        <td class="actions">
+          <a href="#">✏️ Sửa</a>
+          <a href="#">🗑️ Xoá</a>
+        </td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>SV003</td>
+        <td>Lê Văn C</td>
+        <td>c@example.com</td>
+        <td>Nam</td>
+        <td>1997-11-05</td>
+        <td class="actions">
+          <a href="#">✏️ Sửa</a>
+          <a href="#">🗑️ Xoá</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</body>
+</html>
