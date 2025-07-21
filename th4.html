@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý sinh viên</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: #2c3e50;
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .navbar-brand:hover {
+      color: #ddd;
+    }
+
+    h2 {
+      color: #3498db;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .form-control:focus,
+    .form-check-input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    .btn-submit {
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      margin-top: 15px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+      background-color: #1e8748;
+      transform: scale(1.05);
+    }
+
+    .box {
+      background-color: #ffffff;
+      border: 1px solid #3498db;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.1);
+      height: 100%;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    thead th {
+      background-color: #3498db !important;
+      color: white !important;
+    }
+
+    tbody tr:hover {
+      background-color: #eaf4fb;
+    }
+
+    .actions a {
+      text-decoration: none;
+      margin-right: 8px;
+      color: #3498db;
+      font-weight: 500;
+    }
+
+    .actions a:hover {
+      color: #e74c3c;
+      text-decoration: underline;
+    }
+
+    /* Thêm đoạn CSS gạch chân và con trỏ pointer khi hover các ô của các cột */
+    table tbody tr td:nth-child(1):hover,  /* STT */
+    table tbody tr td:nth-child(2):hover,  /* Mã SV */
+    table tbody tr td:nth-child(3):hover,  /* Họ tên */
+    table tbody tr td:nth-child(4):hover,  /* Email */
+    table tbody tr td:nth-child(5):hover,  /* Giới tính */
+    table tbody tr td:nth-child(6):hover { /* Ngày sinh */
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .box {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">Quản Lý Sinh Viên</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="row justify-content-center gx-5">
+      
+      <!-- Form: Thêm sinh viên -->
+      <div class="col-12 col-lg-4 mb-4">
+        <div class="box">
+          <h2>Thêm Sinh Viên</h2>
+          <form>
+            <div class="mb-3">
+              <label for="maSV">Mã sinh viên *</label>
+<input type="text" class="form-control" id="maSV" required />
+            </div>
+            <div class="mb-3">
+              <label for="hoTen">Họ và tên *</label>
+              <input type="text" class="form-control" id="hoTen" required />
+            </div>
+            <div class="mb-3">
+              <label for="email">Email *</label>
+              <input type="email" class="form-control" id="email" required />
+            </div>
+            <div class="mb-3">
+              <label for="ngaySinh">Ngày sinh</label>
+              <input type="date" class="form-control" id="ngaySinh" />
+            </div>
+            <div class="mb-3">
+              <label>Giới tính</label><br />
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="gioiTinh" id="nam" value="Nam" />
+                <label class="form-check-label" for="nam">Nam</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="gioiTinh" id="nu" value="Nữ" />
+                <label class="form-check-label" for="nu">Nữ</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="ghiChu">Ghi chú</label>
+              <textarea class="form-control" id="ghiChu" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-submit">Thêm sinh viên</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Bảng: Danh sách sinh viên -->
+      <div class="col-12 col-lg-7 mb-4">
+        <div class="box">
+          <h2>Danh Sách Sinh Viên</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle text-center">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã SV</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Giới tính</th>
+                  <th>Ngày sinh</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>2251162166</td>
+                  <td>Nguyễn Văn A</td>
+                  <td>a@example.com</td>
+                  <td>Nam</td>
+                  <td>2004-01-15</td>
+                  <td class="actions">
+                    <a href="#">✏️ Sửa</a>
+                    <a href="#">🗑️ Xoá</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>2251163169</td>
+                  <td>Đỗ Thị B</td>
+                  <td>b@example.com</td>
+                  <td>Nữ</td>
+                  <td>2004-03-20</td>
+                  <td class="actions">
+                    <a href="#">✏️ Sửa</a>
+                    <a href="#">🗑️ Xoá</a>
+                  </td>
+                </tr>
+<tr>
+                  <td>3</td>
+                  <td>2251168175</td>
+                  <td>Lê Văn C</td>
+                  <td>c@example.com</td>
+                  <td>Nam</td>
+                  <td>2004-05-10</td>
+                  <td class="actions">
+                    <a href="#">✏️ Sửa</a>
+                    <a href="#">🗑️ Xoá</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- Modal Bootstrap -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal Bootstrap</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          Đây là nội dung của modal.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
