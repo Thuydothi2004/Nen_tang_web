@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quản lý sinh viên</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background-color: #FFF9BD;
+    }
+
+    .navbar {
+      background-color: #748DAE;
+    }
+
+    .navbar-brand {
+      color: #fff;
+      font-weight: bold;
+    }
+
+    .navbar-brand:hover {
+      color: #A3DC9A;
+    }
+
+    h2 {
+      color: #9ECAD6;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .form-control:focus,
+    .form-check-input:focus {
+      border-color: #3498db;
+      box-shadow: 0 0 5px rgba(52, 152, 219, 0.5);
+    }
+
+    .btn-submit {
+      background-color: #27ae60;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 25px;
+      margin-top: 15px;
+      width: 100%;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn-submit:hover {
+      background-color: #1e8748;
+      transform: scale(1.05);
+    }
+
+    .box {
+      background-color: #ffffff;
+      border: 1px solid #3498db;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 6px rgba(52, 152, 219, 0.1);
+      height: 100%;
+    }
+
+    table {
+      font-size: 14px;
+    }
+
+    thead th {
+      background-color: #3498db !important;
+      color: white !important;
+    }
+
+    tbody tr:hover {
+      background-color: #eaf4fb;
+    }
+
+    .actions a {
+      text-decoration: none;
+      margin-right: 8px;
+      color: #3498db;
+      font-weight: 500;
+    }
+ 
+    .actions a:hover {
+      color: #e74c3c;
+      text-decoration: underline;
+    }
+
+    table tbody tr td:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .box {
+        margin-bottom: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+      <a class="navbar-brand" href="#">Quản Lý Sinh Viên</a>
+    </div>
+  </nav>
+
+  <div class="container">
+    <div class="row justify-content-center gx-5">
+
+      <!-- Form Thêm -->
+      <div class="col-12 col-lg-4 mb-4">
+        <div class="box">
+          <h2>Thêm Sinh Viên</h2>
+          <div id="alert-container"></div>
+
+          <form id="studentForm">
+            <div class="mb-3">
+              <label for="maSV">Mã sinh viên *</label>
+              <input type="text" class="form-control" id="maSV" required />
+            </div>
+            <div class="mb-3">
+              <label for="hoTen">Họ và tên *</label>
+              <input type="text" class="form-control" id="hoTen" required />
+            </div>
+            <div class="mb-3">
+              <label for="email">Email *</label>
+              <input type="email" class="form-control" id="email" required />
+            </div>
+            <div class="mb-3">
+              <label for="ngaySinh">Ngày sinh</label>
+              <input type="date" class="form-control" id="ngaySinh" />
+            </div>
+            <div class="mb-3">
+              <label>Giới tính</label><br />
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="gioiTinh" id="nam" value="Nam" />
+                <label class="form-check-label" for="nam">Nam</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input type="radio" class="form-check-input" name="gioiTinh" id="nu" value="Nữ" />
+                <label class="form-check-label" for="nu">Nữ</label>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="ghiChu">Ghi chú</label>
+              <textarea class="form-control" id="ghiChu" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-submit">Thêm sinh viên</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Danh sách -->
+      <div class="col-12 col-lg-7 mb-4">
+        <div class="box">
+          <h2>Danh Sách Sinh Viên</h2>
+          <div class="table-responsive">
+            <table class="table table-bordered align-middle text-center">
+              <thead>
+                <tr>
+                  <th>STT</th>
+                  <th>Mã SV</th>
+                  <th>Họ tên</th>
+                  <th>Email</th>
+                  <th>Giới tính</th>
+                  <th>Ngày sinh</th>
+                  <th>Hành động</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Nội dung động -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const form = document.querySelector("form");
+    const tableBody = document.querySelector("tbody");
+    const submitBtn = document.querySelector(".btn-submit");
+    const alertContainer = document.getElementById("alert-container");
+
+    let editingRow = null;
+
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const maSV = document.getElementById("maSV").value.trim();
+      const hoTen = document.getElementById("hoTen").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const ngaySinh = document.getElementById("ngaySinh").value;
+      const gioiTinh = document.querySelector("input[name='gioiTinh']:checked")?.value || "";
+      const ghiChu = document.getElementById("ghiChu").value;
+
+      if (!maSV || !hoTen || !email) {
+        showAlert("Vui lòng điền đầy đủ thông tin bắt buộc!", "danger");
+        return;
+      }
+
+      if (hoTen.length < 3) {
+        showAlert("Họ tên phải có ít nhất 3 ký tự!", "danger");
+        return;
+      }
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        showAlert("Email không hợp lệ!", "danger");
+        return;
+      }
+
+      if (editingRow) {
+        editingRow.cells[1].innerText = maSV;
+        editingRow.cells[2].innerText = hoTen;
+        editingRow.cells[3].innerText = email;
+        editingRow.cells[4].innerText = gioiTinh;
+        editingRow.cells[5].innerText = ngaySinh;
+        showAlert("Cập nhật sinh viên thành công!", "success");
+        editingRow = null;
+        submitBtn.innerText = "Thêm sinh viên";
+      } else {
+        const rowCount = tableBody.rows.length + 1;
+        const row = tableBody.insertRow();
+
+        row.innerHTML = `
+          <td>${rowCount}</td>
+          <td>${maSV}</td>
+          <td>${hoTen}</td>
+          <td>${email}</td>
+          <td>${gioiTinh}</td>
+          <td>${ngaySinh}</td>
+          <td class="actions">
+            <a href="#" class="edit">✏️ Sửa</a>
+            <a href="#" class="delete">🗑️ Xoá</a>
+          </td>
+        `;
+
+        showAlert(`✅ Đã thêm sinh viên: <strong>${hoTen}</strong> thành công!`, "success");
+      }
+
+      form.reset();
+    });
+
+    tableBody.addEventListener("click", function (e) {
+      e.preventDefault();
+      const target = e.target;
+
+      if (target.classList.contains("delete")) {
+        const row = target.closest("tr");
+        row.remove();
+        reindexTable();
+        showAlert("🗑️ Xoá sinh viên thành công!", "warning");
+      }
+
+      if (target.classList.contains("edit")) {
+        const row = target.closest("tr");
+        editingRow = row;
+        document.getElementById("maSV").value = row.cells[1].innerText;
+        document.getElementById("hoTen").value = row.cells[2].innerText;
+        document.getElementById("email").value = row.cells[3].innerText;
+        document.getElementById("ngaySinh").value = row.cells[5].innerText;
+
+        const gender = row.cells[4].innerText.toLowerCase();
+        if (gender === "nam" || gender === "nữ") {
+          document.getElementById(gender).checked = true;
+        }
+
+        submitBtn.innerText = "Cập nhật thêm sinh viên";
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    function showAlert(message, type) {
+      const alert = document.createElement("div");
+      alert.className = `alert alert-${type} alert-dismissible fade show mt-3`;
+      alert.role = "alert";
+      alert.innerHTML = `
+        ${message}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+      `;
+      alertContainer.appendChild(alert);
+
+      alert.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      setTimeout(() => {
+        alert.remove();
+      }, 3000);
+    }
+
+    function reindexTable() {
+      const rows = tableBody.querySelectorAll("tr");
+      rows.forEach((row, index) => {
+        row.cells[0].innerText = index + 1;
+      });
+    }
+      window.addEventListener("DOMContentLoaded", () => {
+      const sinhViens = [
+        {
+          maSV: "2251162167",
+          hoTen: "Nguyễn Văn An",
+          email: "vana@example.com",
+          gioiTinh: "Nam",
+          ngaySinh: "2004-01-15"
+        },
+        {
+          maSV: "2251163168",
+          hoTen: "Trần Thị Lan",
+          email: "thib@example.com",
+          gioiTinh: "Nữ",
+          ngaySinh: "2004-03-22"
+        },
+        {
+          maSV: "2251162187",
+          hoTen: "Lê Văn hợp",
+          email: "vanc@example.com",
+          gioiTinh: "Nam",
+          ngaySinh: "2004-07-09"
+        }
+      ];
+
+      sinhViens.forEach((sv, index) => {
+        const row = tableBody.insertRow();
+        row.innerHTML = `
+          <td>${index + 1}</td>
+          <td>${sv.maSV}</td>
+          <td>${sv.hoTen}</td>
+          <td>${sv.email}</td>
+          <td>${sv.gioiTinh}</td>
+          <td>${sv.ngaySinh}</td>
+          <td class="actions">
+            <a href="#" class="edit">✏️ Sửa</a>
+            <a href="#" class="delete">🗑️ Xoá</a>
+          </td>
+        `;
+      });
+    });
+  </script>
+
+</body>
+</html>
