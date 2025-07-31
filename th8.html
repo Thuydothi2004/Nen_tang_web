@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Quản lý giao dịch</title>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+<style>
+body {
+  font-family: 'Arial', sans-serif;
+  background-color: #FFF9BD; /* nền vàng kem */
+}
+.navbar {
+  background-color: #A3DC9A; /* navbar xanh pastel */
+}
+.navbar a {
+  color: #002147; /* chữ đậm trên nền sáng */
+  font-weight: bold;
+}
+.table thead th {
+  background-color: #DCD0A8;
+  color: #212529;
+  text-align: center;
+}
+.table td, .table th {
+  vertical-align: middle;
+  background-color: #fffef5;
+}
+.btn-add {
+  background-color: #A3DC9A;
+  color: #002147;
+  font-weight: bold;
+}
+.btn-secondary {
+  background-color: #DEE791;
+  color: #002147;
+  font-weight: bold;
+}
+.btn-outline-secondary {
+  border-color: #DCD0A8;
+  color: #002147;
+}
+.input-group input {
+  background-color: #ffffff;
+  border: 2px solid #A3DC9A;
+  color: #002147;
+  border-radius: 5px 0 0 5px;
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+.input-group .btn {
+  background-color: #A3DC9A;
+  color: #002147;
+  border: 2px solid #A3DC9A;
+  border-radius: 0 5px 5px 0;
+  font-weight: bold;
+}
+.btn-info {
+  background-color: #A3DC9A;
+  color: #002147;
+}
+.btn-warning {
+  background-color: #DEE791;
+  color: #002147;
+}
+.btn-danger {
+  background-color: #FFD6BA;
+  color: #002147;
+}
+.btn-success {
+  background-color: #A3DC9A;
+  color: #002147;
+  border: none;
+  font-weight: bold;
+}
+.modal-header, .modal-footer {
+  background-color: #FFF9BD;
+}
+.modal-content {
+  border: 1px solid #DCD0A8;
+}
+.footer {
+  background-color: #002147;
+  color: white;
+  padding: 20px;
+  text-align: left;
+  font-size: 14px;
+}
+.footer a {
+  color: #ADD8E6;
+  text-decoration: underline;
+}
+.footer strong {
+  font-size: 16px;
+}
+.search-box-centered {
+  width: 300px;
+  margin: 0 auto;
+}
+.pagination .page-link {
+  background-color: #FFF9BD;
+  border-color: #DCD0A8;
+  color: #002147;
+}
+.pagination .page-item.active .page-link {
+  background-color: #A3DC9A;
+  color: #002147;
+  font-weight: bold;
+}
+</style>
+</head>
+<body>
+<nav class="navbar navbar-dark navbar-expand-lg">
+  <a class="navbar-brand" href="#">Trường Đại học Thủy lợi</a>
+  <div class="ml-auto d-flex">
+    <a href="#" class="nav-link text-white">Trang chủ</a>
+    <a href="#" class="nav-link text-white">Quản lý cửa hàng</a>
+    <form class="form-inline ml-3">
+      <input class="form-control mr-2" type="search" placeholder="Nhập nội dung tìm kiếm">
+      <button class="btn btn-success" type="submit">TÌM KIẾM</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container mt-4">
+  <!-- Dòng chứa tất cả: nút + tìm kiếm + dropdown -->
+  <div class="d-flex justify-content-between align-items-center flex-wrap mb-4">
+
+    <!-- Nhóm nút bên trái -->
+    <div class="d-flex align-items-center mb-2 mb-md-0">
+      <button class="btn btn-primary btn-add mr-2" data-toggle="modal" data-target="#addModal">
+        <i class="material-icons">add_circle</i> THÊM
+      </button>
+      <button class="btn btn-secondary mr-3">
+        <i class="material-icons">file_download</i> XUẤT RA FILE
+      </button>
+    </div>
+
+    <!-- Ô tìm kiếm giao dịch -->
+    <div class="d-flex align-items-center mb-2 mb-md-0" style="flex: 1; max-width: 300px;">
+      <div class="input-group">
+        <input type="text" class="form-control" placeholder="Tìm giao dịch">
+        <div class="input-group-append">
+          <button class="btn btn-outline-secondary" type="button"><i class="material-icons">search</i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Kết quả dropdown -->
+    <div class="d-flex align-items-center">
+      <span class="mr-2 font-weight-bold">Kết quả</span>
+      <select class="form-control form-control-sm" style="width: 80px;">
+        <option>5</option>
+        <option>10</option>
+        <option>20</option>
+      </select>
+    </div>
+
+  </div>
+</div>
+
+  <div class="table-responsive">
+    <table class="table table-bordered text-center">
+      <thead>
+        <tr>
+          <th><input type="checkbox"></th>
+          <th>Hành động</th>
+          <th>ID</th>
+          <th>Khách hàng <span class="sort-icons">▲▼</span> </th>
+          <th>Nhân viên <span class="sort-icons">▲▼</span> </th>
+          <th>Số tiền <span class="sort-icons">▲▼</span> </th>
+          <th>Ngày mua<span class="sort-icons">▲▼</span> </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>
+            <button class="btn btn-info btn-sm">👁️</button>
+            <button class="btn btn-warning btn-sm">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </td>
+          <td>1102</td>
+          <td>Võ Hoài An</td>
+          <td>Mai Thục Anh</td>
+          <td>250,000</td>
+          <td>06 Tháng 6 2024 9:00</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>
+            <button class="btn btn-info btn-sm">👁️</button>
+            <button class="btn btn-warning btn-sm">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </td>
+          <td>1199</td>
+          <td>Hoàng Thị Thắm</td>
+          <td>Nguyễn Văn Hồng</td>
+          <td>600,000</td>
+          <td>06 Tháng 6 2024 9:03</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>
+            <button class="btn btn-info btn-sm">👁️</button>
+            <button class="btn btn-warning btn-sm">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </td>
+          <td>1239</td>
+          <td>Nguyễn Huy Quang</td>
+          <td>Nguyễn Văn Hồng</td>
+          <td>934,000</td>
+          <td>06 Tháng 6 2024 9:10</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>
+            <button class="btn btn-info btn-sm">👁️</button>
+            <button class="btn btn-warning btn-sm">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </td>
+          <td>1077</td>
+          <td>Nguyễn Văn Nam</td>
+          <td>Mai Thục Anh</td>
+          <td>150,000</td>
+          <td>06 Tháng 6 2024 9:20</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox"></td>
+          <td>
+            <button class="btn btn-info btn-sm">👁️</button>
+            <button class="btn btn-warning btn-sm">✏️</button>
+            <button class="btn btn-danger btn-sm">❌</button>
+          </td>
+          <td>1439</td>
+          <td>Nguyễn Hồng Minh</td>
+          <td>Mai Thục Anh</td>
+          <td>354,000</td>
+          <td>06 Tháng 6 2024 9:40</td>
+        </tr>
+        <!-- Thêm các dòng khác tương tự -->
+      </tbody>
+    </table>
+  </div>
+
+  <button class="btn btn-danger">DELETE SELECTED RECORDS</button>
+  <nav aria-label="Page navigation">
+    <ul class="pagination mt-3">
+      <li class="page-item disabled">
+        <span class="page-link">Trang</span>
+      </li>
+      <li class="page-item active"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">4</a></li>
+      <li class="page-item"><a class="page-link" href="#">5</a></li>
+      <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+    </ul>
+  </nav>
+  <p class="text-right">Kết quả 1 trong 20 trang</p>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p><strong>TRƯỜNG ĐẠI HỌC THUỶ LỢI</strong></p>
+    <p>Địa chỉ: 175 Tây Sơn, Đống Đa, Hà Nội</p>
+    <p>Điện thoại: (024) 38522201 - Fax: (024) 35633351</p>
+    <p>Email: <a href="mailto:phongctht@tlu.edu.vn">phongctht@tlu.edu.vn</a></p>
+  </div>
+</footer>
+
+<!-- Modal Thêm Giao Dịch -->
+<div class="modal fade" id="addModal" tabindex="-1">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Thêm giao dịch</h5>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label>Khách hàng</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Nhân viên</label>
+            <input type="text" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label>Số tiền</label>
+            <input type="number" class="form-control" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Huỷ</button>
+        <button type="submit" class="btn btn-success">Thêm</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
