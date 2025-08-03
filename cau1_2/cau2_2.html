@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Nhập Thông Tin</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background-color: #FEFFC4;
+      color: #280A3E;
+    }
+
+    h2, h3 {
+      color: #FFBC4C;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 8px;
+      width: 300px;
+      border: 1px solid #799EFF;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    input.error-border {
+      border: 2px solid red;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+
+    button {
+      background-color: #FFBC4C;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #799EFF;
+    }
+
+    table {
+      border-collapse: collapse;
+      margin-top: 20px;
+      width: 100%;
+      background-color: #FEFFC4;
+      color: #280A3E;
+    }
+
+    th {
+      background-color: #FFDE63;
+      color: #000;
+    }
+
+    th, td {
+      border: 1px solid #799EFF;
+      padding: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+  <h2>Nhập thông tin</h2>
+  <form id="infoForm">
+    <div class="form-group">
+      <label for="customer">Tên khách hàng:</label>
+      <input type="text" id="customer">
+      <div class="error" id="customerError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="employee">Tên nhân viên:</label>
+      <input type="text" id="employee">
+      <div class="error" id="employeeError"></div>
+    </div>
+
+    <button type="submit">Thêm</button>
+  </form>
+
+  <h3>Danh sách dữ liệu:</h3>
+  <table id="dataTable">
+    <thead>
+      <tr>
+        <th>Khách hàng</th>
+        <th>Nhân viên</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    var userData = [];
+
+    $(document).ready(function () {
+      function renderTable() {
+        const tbody = $("#dataTable tbody");
+        tbody.empty();
+        userData.forEach(item => {
+          tbody.append(`<tr><td>${item.customer}</td><td>${item.employee}</td></tr>`);
+        });
+      }
+
+      renderTable();
+
+      $("#infoForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const customer = $("#customer").val().trim();
+        const employee = $("#employee").val().trim();
+        let isValid = true;
+
+        $("#customerError, #employeeError").text("");
+        $("#customer, #employee").removeClass("error-border");
+
+        if (customer === "") {
+          $("#customerError").text("❌ Tên khách hàng không được để trống.");
+          $("#customer").addClass("error-border");
+          isValid = false;
+        } else if (customer.length > 30) {
+          $("#customerError").text("❌ Tên khách hàng không được vượt quá 30 ký tự.");
+          $("#customer").addClass("error-border");
+          isValid = false;
+        }
+
+        if (employee === "") {
+          $("#employeeError").text("❌ Tên nhân viên không được để trống.");
+          $("#employee").addClass("error-border");
+          isValid = false;
+        } else if (employee.length > 30) {
+          $("#employeeError").text("❌ Tên nhân viên không được vượt quá 30 ký tự.");
+          $("#employee").addClass("error-border");
+          isValid = false;
+        }
+
+        if (isValid) {
+          userData.push({ customer, employee });
+          renderTable();
+          $("#infoForm")[0].reset();
+        }
+      });
+    });
+  </script>
+</body>
+</html>

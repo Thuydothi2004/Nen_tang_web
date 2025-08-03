@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Form Thông Tin Cá Nhân</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+    body {
+      font-family: Arial;
+      padding: 20px;
+      background-color: #FFD6BA;
+      color: #333;
+    }
+
+    h2, h3 {
+      color: #5b4d2c;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      background-color: #FFF9BD;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      padding: 8px;
+      width: 300px;
+      border: 1px solid #A3DC9A;
+      border-radius: 4px;
+      background-color: #fff;
+    }
+
+    input.error-border {
+      border: 2px solid red;
+    }
+
+    .error {
+      color: red;
+      font-size: 0.9em;
+      margin-top: 4px;
+    }
+
+    button {
+      background-color: #A3DC9A;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.2s;
+    }
+
+    button:hover {
+      background-color: #DEE791;
+    }
+
+    table {
+      margin-top: 20px;
+      border-collapse: collapse;
+      width: 100%;
+      background-color: #FFF9BD;
+    }
+
+    th {
+      background-color: #DEE791;
+      color: #000;
+    }
+
+    th, td {
+      border: 1px solid #A3DC9A;
+      padding: 10px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Nhập thông tin cá nhân</h2>
+  <form id="infoForm">
+    <div class="form-group">
+      <label for="firstName">Tên:</label>
+      <input type="text" id="firstName">
+      <div class="error" id="firstNameError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="middleName">Họ đệm:</label>
+      <input type="text" id="middleName">
+      <div class="error" id="middleNameError"></div>
+    </div>
+
+    <div class="form-group">
+      <label for="address">Địa chỉ:</label>
+      <input type="text" id="address">
+      <div class="error" id="addressError"></div>
+    </div>
+
+    <button type="submit">Thêm</button>
+  </form>
+
+  <h3>Danh sách người dùng:</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Tên</th>
+        <th>Họ đệm</th>
+        <th>Địa chỉ</th>
+      </tr>
+    </thead>
+    <tbody id="dataTableBody"></tbody>
+  </table>
+
+  <script>
+    var peopleData = [];
+
+    $(document).ready(function () {
+      function renderTable() {
+        const tbody = $("#dataTableBody");
+        tbody.empty();
+        peopleData.forEach(person => {
+          tbody.append(`
+            <tr>
+              <td>${person.firstName}</td>
+              <td>${person.middleName}</td>
+              <td>${person.address}</td>
+            </tr>
+          `);
+        });
+      }
+
+      renderTable();
+
+      $("#infoForm").on("submit", function (e) {
+        e.preventDefault();
+
+        const firstName = $("#firstName").val().trim();
+        const middleName = $("#middleName").val().trim();
+        const address = $("#address").val().trim();
+        let isValid = true;
+
+        $(".error").text("");
+        $("input").removeClass("error-border");
+
+        if (firstName === "") {
+          $("#firstNameError").text("Vui lòng nhập tên.");
+          $("#firstName").addClass("error-border");
+          isValid = false;
+        } else if (firstName.length > 15) {
+          $("#firstNameError").text("Tên không được vượt quá 15 ký tự.");
+          $("#firstName").addClass("error-border");
+          isValid = false;
+        }
+
+        if (middleName === "") {
+          $("#middleNameError").text("Vui lòng nhập họ đệm.");
+          $("#middleName").addClass("error-border");
+          isValid = false;
+        } else if (middleName.length > 20) {
+          $("#middleNameError").text("Họ đệm không được vượt quá 20 ký tự.");
+          $("#middleName").addClass("error-border");
+          isValid = false;
+        }
+
+        if (address === "") {
+          $("#addressError").text("Vui lòng nhập địa chỉ.");
+          $("#address").addClass("error-border");
+          isValid = false;
+        } else if (address.length > 50) {
+          $("#addressError").text("Địa chỉ không được vượt quá 50 ký tự.");
+          $("#address").addClass("error-border");
+          isValid = false;
+        }
+
+        if (isValid) {
+          peopleData.push({ firstName, middleName, address });
+          renderTable();
+          $("#infoForm")[0].reset();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
